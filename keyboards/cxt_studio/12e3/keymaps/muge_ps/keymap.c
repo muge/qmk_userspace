@@ -7,8 +7,7 @@
 
 enum my_layers {
     _BASE,
-    _BASE2,
-    _BASE3,
+    _PS,
     _RGBL,
 };
 
@@ -19,60 +18,56 @@ enum custom_keycodes {
     PS_ZI, PS_ZO,
 };
 
+const uint16_t PROGMEM pslayeron_combo[] = {KC_ESC, C(KC_X), C(KC_C), COMBO_END};
+const uint16_t PROGMEM pslayeroff_combo[] = {KC_C, KC_D, COMBO_END};
+combo_t key_combos[] = {
+    COMBO(pslayeron_combo, TG(1)),
+    COMBO(pslayeroff_combo, TG(1)), // keycodes with modifiers are possible too!
+};
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_BASE] = LAYOUT(
-        CCUNDO,    CCREDO,      TH_VW,     TH_GSP,
-        TH_BS,     TH_DX,       TH_JE,     TH_ML,
-        KC_LCTL,   KC_LSFT,     KC_LALT,   LT(1,KC_ESC),
-        TG(_RGBL), QK_BOOT,     TG(_BASE2)
+        KC_ESC, C(KC_X), C(KC_C), C(KC_V),  MS_BTN3, RM_TOGG,
+        KC_PSCR,C(KC_Z), KC_CALC, KC_MNXT,     KC_MPLY,
+        MO(2), KC_LGUI, KC_DEL, KC_APP
     ),
-    [_BASE2] = LAYOUT(
-        TH_CX,    TH_PST,      C(S(KC_W)),  C(KC_F4),
-        TH_SAV,   TH_05,       TH_1T,       TH_F1D,
-        _______,  _______,     _______,    _______,
-        _______,  _______,     _______
+
+    [_PS] = LAYOUT(
+        KC_ESC, C(KC_X), C(KC_C), C(KC_V),  KC_F5, C(KC_1),
+        C(KC_Z),C(KC_D), C(KC_J), C(KC_T),     KC_MPLY,
+        MO(2),  KC_DEL,  KC_APP,  KC_SPC
     ),
-    [_BASE3] = LAYOUT(
-        _______,  _______,  _______,  _______,
-        _______,  _______,  _______,  _______,
-        _______,  _______,  _______,  _______,
-        _______,  _______,  _______
-    ),
+
     [_RGBL] = LAYOUT(
-        KC_APP,    KC_ESC,    KC_DEL,   QK_BOOT,
-        RGB_MOD,   RGB_SAI,   KC_LGUI,  _______,
-        RGB_RMOD,  RGB_SAD,   KC_HOME,  KC_END,
-        RGB_TOG,   _______,   _______
+        RM_NEXT, RM_SATU, KC_INS,  KC_DEL,   _______, _______,
+        RM_PREV, RM_SATD, KC_PGUP, KC_HOME,     KC_MUTE,
+        _______, QK_BOOT, KC_PGDN, KC_END
     ),
 };
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    //Order: Left, Right, Big
+    // Encoders: Left, Right, Big
     [_BASE] = {
-        ENCODER_CCW_CW(KC_LBRC, KC_RBRC),
+        ENCODER_CCW_CW(MS_WHLD, MS_WHLU),
         ENCODER_CCW_CW(KC_PGDN, KC_PGUP),
-        ENCODER_CCW_CW(PS_ZO, PS_ZI)
+        ENCODER_CCW_CW(KC_VOLD, KC_VOLU)
     },
-    [_BASE2] = {
-        ENCODER_CCW_CW(MS_WHLD, MS_WHLU),
-        ENCODER_CCW_CW(_______, _______),
-        ENCODER_CCW_CW(KC_LBRC, KC_RBRC)
-    },
-    [_BASE3] = {
-        ENCODER_CCW_CW(MS_WHLD, MS_WHLU),
-        ENCODER_CCW_CW(_______, _______),
-        ENCODER_CCW_CW(KC_LBRC, KC_RBRC)
+    [_PS] = {
+        ENCODER_CCW_CW(KC_LBRC, KC_RBRC),
+        ENCODER_CCW_CW(A(MS_WHLD), A(MS_WHLU)),
+        ENCODER_CCW_CW(KC_VOLD, KC_VOLU)
     },
     [_RGBL] = {
-        ENCODER_CCW_CW(RGB_HUD, RGB_HUI),
-        ENCODER_CCW_CW(RGB_SPD, RGB_SPI),
-        ENCODER_CCW_CW(RGB_VAD, RGB_VAI)
+        ENCODER_CCW_CW(RM_HUED, RM_HUEU),
+        ENCODER_CCW_CW(RM_SPDD, RM_SPDU),
+        ENCODER_CCW_CW(RM_VALD, RM_VALU)
     },
 };
 #endif
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
