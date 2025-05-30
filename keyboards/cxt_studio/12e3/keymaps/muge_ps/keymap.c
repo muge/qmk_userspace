@@ -57,7 +57,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     },
     [_PS] = {
         ENCODER_CCW_CW(KC_LBRC, KC_RBRC),
-        ENCODER_CCW_CW(A(MS_WHLD), A(MS_WHLU)),
+        ENCODER_CCW_CW(PS_ZO, PS_ZI),
         ENCODER_CCW_CW(KC_VOLD, KC_VOLU)
     },
     [_RGBL] = {
@@ -72,14 +72,18 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case PS_ZI:
-            register_mods(MOD_BIT(KC_LALT));
-            tap_code16(MS_WHLU);
-            unregister_mods(MOD_BIT(KC_LALT));
+            if (record->event.pressed) {
+                register_code16(A(MS_WHLU));
+            } else {
+                unregister_code16(A(MS_WHLU));
+            }
             return true;
         case PS_ZO:
-            register_mods(MOD_BIT(KC_LALT));
-            tap_code16(MS_WHLD);
-            unregister_mods(MOD_BIT(KC_LALT));
+            if (record->event.pressed) {
+                register_code16(A(MS_WHLD));
+            } else {
+                unregister_code16(A(MS_WHLD));
+            }
             return true;
         case CCUNDO:
             register_mods(MOD_BIT(KC_LCTL));
